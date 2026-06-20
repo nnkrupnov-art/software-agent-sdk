@@ -1,0 +1,56 @@
+name: Build agent-server image
+
+on:
+  push:
+    branches: [main, 'custom-prompts']
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/agent-server-custom
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
+        with:
+          version: latest
+          python-version: '3.13'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd
+
+      - name: Log in to GHCR
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: uv sync --frozen --dev
+
+      - name: Build & push (python-amd64)
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          CUSTOM_TAGS: python
+          ARCH: amd64
+          TARGET: binary
+          PLATFORM: linux/amd64
+          BASE_IMAGE: nikolaik/python-nodejs:python3.13-nodejs22-slim
+          SDK_SHA: ${{ github.sha }}
+          SDK_REF: ${{ github.ref }}
+          CI: 'true'
+        run: |
+          uv run ./openhands-agent-server/openhands/agent_server/docker/build.py \
+            --arch amd64 \
+            --image "$IMAGE" \
+            --custom-tags python \
+            --target binary
