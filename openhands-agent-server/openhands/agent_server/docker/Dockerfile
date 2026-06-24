@@ -370,7 +370,8 @@ RUN chmod +x /usr/local/bin/openhands-agent-server
 # Bake the default agent identity into the image so _load_soul_md() picks it up
 # at runtime without requiring a volume mount of ~/.openhands/SOUL.md.
 USER root
-RUN mkdir -p /home/${USERNAME}/.openhands
+RUN mkdir -p /home/${USERNAME}/.openhands \
+    && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.openhands
 COPY --chown=${USERNAME}:${USERNAME} openhands-agent-server/openhands/agent_server/soul/SOUL.md /home/${USERNAME}/.openhands/SOUL.md
 USER ${USERNAME}
 # Fix library path to use system GCC libraries instead of bundled ones
@@ -382,7 +383,8 @@ ARG USERNAME
 COPY --chown=${USERNAME}:${USERNAME} --from=binary-builder /agent-server/dist/openhands-agent-server /usr/local/bin/openhands-agent-server
 RUN chmod +x /usr/local/bin/openhands-agent-server
 USER root
-RUN mkdir -p /home/${USERNAME}/.openhands
+RUN mkdir -p /home/${USERNAME}/.openhands \
+    && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.openhands
 COPY --chown=${USERNAME}:${USERNAME} openhands-agent-server/openhands/agent_server/soul/SOUL.md /home/${USERNAME}/.openhands/SOUL.md
 USER ${USERNAME}
 # Fix library path to use system GCC libraries instead of bundled ones
