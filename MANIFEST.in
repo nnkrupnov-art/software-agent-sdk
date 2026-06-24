@@ -41,6 +41,9 @@ recursive-include openhands-agent-server py.typed
 include openhands-agent-server/openhands/agent_server/docker/Dockerfile
 include openhands-agent-server/openhands/agent_server/docker/wallpaper.svg
 
+# Default agent identity baked into the image at build time
+include openhands-agent-server/openhands/agent_server/soul/SOUL.md
+
 # PyInstaller spec
 include openhands-agent-server/openhands/agent_server/agent-server.spec
 

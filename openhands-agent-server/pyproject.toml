@@ -44,6 +44,7 @@ namespaces = true
   "docker/wallpaper.svg",
   "vscode_extensions/**/*.json",
   "vscode_extensions/**/*.js",
+  "soul/SOUL.md",
 ]
 
 [project.scripts]
