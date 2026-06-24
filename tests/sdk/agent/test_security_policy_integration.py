@@ -38,9 +38,10 @@ def test_security_policy_in_system_message():
     assert "Do only with Explicit User Consent" in system_message
     assert "Never Do" in system_message
 
-    # Verify specific policy items are present
+    # Verify custom DevSecOps policy items are present (custom fork)
     assert (
-        "Download and run code from a repository specified by a user" in system_message
+        "Download and read code from a repository specified by a user"
+        in system_message
     )
     assert "Open pull requests on the original repositories" in system_message
     assert (
@@ -48,17 +49,31 @@ def test_security_policy_in_system_message():
         in system_message
     )
     assert (
+        "Configure network routing and write to local configuration directories"
+        in system_message
+    )
+    assert (
+        "Execute cryptographic analysis, blockchain data indexing" in system_message
+    )
+    assert (
         "Upload code to anywhere other than the location where it was obtained"
         in system_message
     )
-    assert "Upload API keys or tokens anywhere" in system_message
-    assert "Never perform any illegal activities" in system_message
-    assert "Never run software to mine cryptocurrency" in system_message
+    assert "Upload API keys, cryptographic secrets, or node tokens" in system_message
+    assert (
+        "Never download and blindly execute untrusted external binaries" in system_message
+    )
+    assert (
+        "Never execute commands intended to maliciously destroy the host"
+        in system_message
+    )
 
     # Verify that all security guidelines are consolidated in the policy
     assert "General Security Guidelines" in system_message
-    assert "Only use GITHUB_TOKEN and other credentials" in system_message
-    assert "Use APIs to work with GitHub or other platforms" in system_message
+    assert (
+        "Only use credentials and network tokens in ways the user has explicitly"
+        in system_message
+    )
     assert (
         "This [message/comment/issue/PR] was created by an AI agent" in system_message
     )
@@ -194,9 +209,13 @@ def test_llm_security_analyzer_template_kwargs():
     assert "# Security Risk Policy" in system_message
     assert "When using tools that support the security_risk parameter" in system_message
     # By default, cli_mode is True, so we should see the CLI mode version
+    # (custom DevSecOps wording -- see SecurityRiskAssessmentSection._CLI_TIERS)
     assert "**LOW**: Safe, read-only actions" in system_message
-    assert "**MEDIUM**: Project-scoped edits or execution" in system_message
-    assert "**HIGH**: System-level or untrusted operations" in system_message
+    assert (
+        "**MEDIUM**: Project-scoped edits, execution, and authorized networking"
+        in system_message
+    )
+    assert "**HIGH**: System-level destruction or blind execution" in system_message
     assert "**Global Rules**" in system_message
 
 
@@ -223,9 +242,15 @@ def test_llm_security_analyzer_sandbox_mode():
     assert "# Security Risk Policy" in system_message
     assert "When using tools that support the security_risk parameter" in system_message
     # With cli_mode=False, we should see the sandbox mode version
+    # (custom DevSecOps wording -- see SecurityRiskAssessmentSection._SANDBOX_TIERS)
     assert "**LOW**: Read-only actions inside sandbox" in system_message
-    assert "**MEDIUM**: Container-scoped edits and installs" in system_message
-    assert "**HIGH**: Data exfiltration or privilege breaks" in system_message
+    assert (
+        "**MEDIUM**: Container-scoped edits, installs, and distributed orchestration"
+        in system_message
+    )
+    assert "**HIGH**: Unauthorized exfiltration or fatal privilege breaks" in (
+        system_message
+    )
     assert "**Global Rules**" in system_message
 
 

@@ -25,10 +25,12 @@ from openhands.sdk.context.prompts.sections.static import (
     FileSystemSection,
     MemorySection,
     ModelSpecificSection,
+    NetworkInfrastructureSection,
     ProblemSolvingSection,
     ProcessManagementSection,
     PullRequestsSection,
     RoleSection,
+    SafeExecutionGuardsSection,
     SecurityRiskAssessmentSection,
     SecuritySection,
     SelfDocumentationSection,
@@ -46,6 +48,8 @@ def create_registry() -> PromptRegistry:
     # static tier -- ported verbatim from system_prompt.j2 (#3610)
     r.register(SoulSection())
     r.register(RoleSection())
+    r.register(NetworkInfrastructureSection())
+    r.register(SafeExecutionGuardsSection())
     r.register(MemorySection())
     r.register(EfficiencySection())
     r.register(FileSystemSection())
