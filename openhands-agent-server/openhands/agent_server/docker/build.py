@@ -522,6 +522,10 @@ class BuildOptions(BaseModel):
                 [
                     f"{self.image}:{self.short_sha}-{custom_tag}{arch_suffix}",
                     f"{self.image}:{self.long_sha}-{custom_tag}{arch_suffix}",
+                    # Plain `{repo}:{custom_tag}` so the orchestrator's
+                    # AGENT_SERVER_IMAGE_TAG lookup resolves locally without
+                    # the arch suffix.
+                    f"{self.image}:{custom_tag}",
                 ]
             )
             if self.branch_tag:

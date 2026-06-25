@@ -450,6 +450,7 @@ def test_all_tags_include_short_long_sha_and_branch():
     assert opts.all_tags == [
         "ghcr.io/openhands/agent-server:abc1234-python",
         "ghcr.io/openhands/agent-server:abc1234567890fedcba-python",
+        "ghcr.io/openhands/agent-server:python",
         "ghcr.io/openhands/agent-server:feature-release-1-python",
     ]
 
