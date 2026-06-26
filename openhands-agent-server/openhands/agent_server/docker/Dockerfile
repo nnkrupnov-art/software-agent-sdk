@@ -224,6 +224,14 @@ ENV OH_ENABLE_VNC=false
 ENV LOG_JSON=true
 EXPOSE ${PORT}
 
+# Bake the runtime SOUL.md identity into every downstream target
+# (source / source-minimal / binary / binary-minimal) by dropping it into the
+# agent-server user home. Read by openhands.sdk.agent.base._load_soul_md()
+# when the rendered system prompt encounters the _DEFAULT_SOUL placeholder.
+COPY --chown=${USERNAME}:${USERNAME} \
+    openhands-agent-server/openhands/agent_server/soul/SOUL.md \
+    /home/${USERNAME}/.openhands/SOUL.md
+
 ####################################################################################
 # Base image (full)
 # It includes additional Docker, VNC, Desktop, and VSCode Web.

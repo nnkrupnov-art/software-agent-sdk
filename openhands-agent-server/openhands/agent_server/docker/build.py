@@ -537,9 +537,14 @@ class BuildOptions(BaseModel):
             for versioned_tag in self.versioned_tags:
                 tags.append(f"{self.image}:{versioned_tag}{arch_suffix}")
 
-        # Append target suffix for clarity (binary is default, no suffix needed)
+        # Append target suffix for clarity (binary is default, no suffix needed).
+        # For non-binary targets we ALSO emit one unsuffixed copy of the first
+        # tag so the orchestrator's `container.image.tags[0]` lookup (which the
+        # upstream app_server uses to populate `sandbox_spec_id`) resolves to a
+        # tag that exactly matches `AGENT_SERVER_IMAGE_TAG` when set.
         if self.target != "binary":
             tags = [f"{t}-{self.target}" for t in tags]
+            tags.append(tags[0].removesuffix(f"-{self.target}"))
         return list(dict.fromkeys(tags))
 
 
